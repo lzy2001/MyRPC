@@ -11,7 +11,7 @@ import Server.server.RpcServer;
 
 
 @AllArgsConstructor
-public class NettyRPCRPCServer implements RpcServer {
+public class NettyRPCServer implements RpcServer {
     private ServiceProvider serviceProvider;
     @Override
     public void start(int port) {
