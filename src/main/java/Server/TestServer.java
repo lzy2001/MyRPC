@@ -4,6 +4,7 @@ package Server;
 import Server.server.RpcServer;
 import Common.service.Impl.UserServiceImpl;
 import Common.service.UserService;
+import Server.server.impl.NettyRPCRPCServer;
 import Server.server.impl.SimpleRPCRPCServer;
 import Server.provider.ServiceProvider;
 
@@ -15,7 +16,7 @@ public class TestServer {
         ServiceProvider serviceProvider=new ServiceProvider();
         serviceProvider.provideServiceInterface(userService);
 
-        RpcServer rpcServer=new SimpleRPCRPCServer(serviceProvider);
+        RpcServer rpcServer=new NettyRPCRPCServer(serviceProvider);
         rpcServer.start(9999);
     }
 }
