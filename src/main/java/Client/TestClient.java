@@ -8,6 +8,7 @@ import Common.pojo.User;
 
 public class TestClient {
     public static void main(String[] args) {
+
         ClientProxy clientProxy = new ClientProxy();
         UserService proxy=clientProxy.getProxy(UserService.class);
 
