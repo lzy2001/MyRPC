@@ -10,10 +10,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 
-public class SimpleSocketRpcCilent implements RpcClient {
+public class SimpleSocketRpcClient implements RpcClient {
     private String host;
     private int port;
-    public SimpleSocketRpcCilent(String host,int port){
+    public SimpleSocketRpcClient(String host,int port){
         this.host=host;
         this.port=port;
     }
