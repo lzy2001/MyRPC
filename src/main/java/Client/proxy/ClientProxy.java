@@ -15,7 +15,7 @@ public class ClientProxy implements InvocationHandler {
     //传入参数service接口的class对象，反射封装成一个request
 
     private RpcClient rpcClient;
-    public ClientProxy(){
+    public ClientProxy() throws InterruptedException{
         rpcClient=new NettyRpcClient();
     }
 
