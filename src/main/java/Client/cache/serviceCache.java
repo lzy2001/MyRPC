@@ -8,10 +8,10 @@ import java.util.Map;
 public class serviceCache {
     //key: serviceName 服务名
     //value： addressList 服务提供者列表
-    private static Map<String, List<String>> cache = new HashMap<>();
+    private static Map<String, List<String>> cache=new HashMap<>();
 
     //添加服务
-    public void addServiceToCache(String serviceName,String address){
+    public void addServcieToCache(String serviceName,String address){
         if(cache.containsKey(serviceName)){
             List<String> addressList = cache.get(serviceName);
             addressList.add(address);
@@ -32,14 +32,14 @@ public class serviceCache {
             System.out.println("修改失败，服务不存在");
         }
     }
-    //从缓存中取服务地址
-    public  List<String> getServiceFromCache(String serviceName){
+    //从缓存中取服务地址列表
+    public List<String> getServiceListFromCache(String serviceName){
         if(!cache.containsKey(serviceName)) {
             return null;
         }
-        List<String> a=cache.get(serviceName);
-        return a;
+        return cache.get(serviceName);
     }
+
     //从缓存中删除服务地址
     public void delete(String serviceName,String address){
         List<String> addressList = cache.get(serviceName);

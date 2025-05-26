@@ -24,13 +24,13 @@ public class ServiceProvider {
     }
     //本地注册服务
 
-    public void provideServiceInterface(Object service){
+    public void provideServiceInterface(Object service, boolean canRetry){
         String serviceName=service.getClass().getName();
         Class<?>[] interfaceName=service.getClass().getInterfaces();
 
         for (Class<?> clazz:interfaceName){
             interfaceProvider.put(clazz.getName(),service);
-            serviceRegister.register(clazz.getName(), new InetSocketAddress(host, port));
+            serviceRegister.register(clazz.getName(), new InetSocketAddress(host, port), canRetry);
         }
 
     }
