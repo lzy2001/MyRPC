@@ -2,7 +2,7 @@ package org.example.test.serializer;
 
 
 import common.exception.SerializeException;
-import common.serializer.myserializer.HessianSerializer;
+import common.serializer.mySerializer.HessianSerializer;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

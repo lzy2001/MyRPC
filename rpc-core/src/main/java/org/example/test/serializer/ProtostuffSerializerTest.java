@@ -3,7 +3,7 @@ package org.example.test.serializer;
 
 import org.example.pojo.User;
 import common.exception.SerializeException;
-import common.serializer.myserializer.ProtostuffSerializer;
+import common.serializer.mySerializer.ProtostuffSerializer;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

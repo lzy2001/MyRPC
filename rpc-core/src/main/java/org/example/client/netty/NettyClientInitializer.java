@@ -1,9 +1,9 @@
 package org.example.client.netty;
 
 
-import common.serializer.mycoder.MyDecoder;
-import common.serializer.mycoder.MyEncoder;
-import common.serializer.myserializer.Serializer;
+import common.serializer.myCoder.MyDecoder;
+import common.serializer.myCoder.MyEncoder;
+import common.serializer.mySerializer.Serializer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
