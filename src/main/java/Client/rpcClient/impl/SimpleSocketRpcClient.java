@@ -11,8 +11,8 @@ import java.net.Socket;
 
 
 public class SimpleSocketRpcClient implements RpcClient {
-    private String host;
-    private int port;
+    private final String host;
+    private final int port;
     public SimpleSocketRpcClient(String host,int port){
         this.host=host;
         this.port=port;
@@ -27,8 +27,7 @@ public class SimpleSocketRpcClient implements RpcClient {
             oos.writeObject(request);
             oos.flush();
 
-            RpcResponse response=(RpcResponse) ois.readObject();
-            return response;
+            return (RpcResponse) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             return null;

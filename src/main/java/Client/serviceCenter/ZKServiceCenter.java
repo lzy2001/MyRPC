@@ -13,15 +13,15 @@ import java.util.List;
 
 
 public class ZKServiceCenter implements ServiceCenter{
-    // curator 提供的zookeeper客户端
-    private CuratorFramework client;
-    //zookeeper根路径节点
+    // curator 提供的  zookeeper 客户端
+    private final CuratorFramework client;
+    // zookeeper 根路径节点
     private static final String ROOT_PATH = "MyRPC";
     private static final String RETRY = "CanRetry";
-    //serviceCache
-    private serviceCache cache;
+    // serviceCache
+    private final serviceCache cache;
 
-    //负责zookeeper客户端的初始化，并与zookeeper服务端进行连接
+    // 负责zookeeper客户端的初始化，并与zookeeper服务端进行连接
     public ZKServiceCenter() throws InterruptedException {
         // 指数时间重试
         RetryPolicy policy = new ExponentialBackoffRetry(1000, 3);
@@ -34,25 +34,26 @@ public class ZKServiceCenter implements ServiceCenter{
         this.client.start();
         System.out.println("zookeeper 连接成功");
         //初始化本地缓存
-        cache=new serviceCache();
-        //加入zookeeper事件监听器
-        watchZK watcher=new watchZK(client,cache);
-        //监听启动
+        cache = new serviceCache();
+        // 加入zookeeper事件监听器
+        watchZK watcher = new watchZK(client, cache);
+        // 监听启动
         watcher.watchToUpdate(ROOT_PATH);
     }
-    //根据服务名（接口名）返回地址
+    // 根据服务名（接口名）返回地址
     @Override
     public InetSocketAddress serviceDiscovery(String serviceName) {
         try {
-            //先从本地缓存中找
-            List<String> addressList=cache.getServiceListFromCache(serviceName);
-            //如果找不到，再去zookeeper中找
-            //这种i情况基本不会发生，或者说只会出现在初始化阶段
-            if(addressList==null) {
-                addressList=client.getChildren().forPath("/" + serviceName);
+            // 先从本地缓存中找
+            List<String> addressList = cache.getServiceListFromCache(serviceName);
+            // 如果找不到，再去zookeeper中找
+            if (addressList == null) {
+                // 获取服务名对应路径下所有子节点，子节点通常保存服务实例的地址(ip : port格式)
+                addressList = client.getChildren().forPath("/" + serviceName);
             }
             // 负载均衡得到地址
             String address = new ConsistencyHashBalance().balance(addressList);
+            // 将子节点字符串(ip : port格式)解析为InetSocketAddress，方便客户端进行通信
             return parseAddress(address);
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,16 +62,16 @@ public class ZKServiceCenter implements ServiceCenter{
     }
     //
     public boolean checkRetry(String serviceName) {
-        boolean canRetry =false;
+        boolean canRetry = false;
         try {
             List<String> serviceList = client.getChildren().forPath("/" + RETRY);
-            for(String s:serviceList){
-                if(s.equals(serviceName)){
-                    System.out.println("服务"+serviceName+"在白名单上，可进行重试");
-                    canRetry=true;
+            for (String s: serviceList) {
+                if (s.equals(serviceName)) {
+                    System.out.println("服务" + serviceName + "在白名单上，可进行重试");
+                    canRetry = true;
                 }
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return canRetry;

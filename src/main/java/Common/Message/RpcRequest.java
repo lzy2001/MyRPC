@@ -13,12 +13,12 @@ import java.io.Serializable;
 @Data
 @Builder
 public class RpcRequest implements Serializable {
-    //服务类名，客户端只知道接口
+    // 服务类名，客户端只知道接口，在服务端指向实现类
     private String interfaceName;
-    //调用的方法名
+    // 调用的方法名
     private String methodName;
-    //参数列表
+    // 参数列表
     private Object[] params;
-    //参数类型
+    // 参数类型
     private Class<?>[] paramsType;
 }

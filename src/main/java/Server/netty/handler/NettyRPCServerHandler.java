@@ -1,6 +1,6 @@
 package Server.netty.handler;
 
-import Server.ratelimit.RateLimit;
+import Server.rateLimit.RateLimit;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.AllArgsConstructor;
@@ -16,6 +16,7 @@ public class NettyRPCServerHandler extends SimpleChannelInboundHandler<RpcReques
     private ServiceProvider serviceProvider;
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequest request) throws Exception {
+        // 接收request，读取并调取服务
         RpcResponse response = getResponse(request);
         ctx.writeAndFlush(response);
         ctx.close();
@@ -27,9 +28,9 @@ public class NettyRPCServerHandler extends SimpleChannelInboundHandler<RpcReques
     }
     private RpcResponse getResponse(RpcRequest rpcRequest){
         //得到服务名
-        String interfaceName=rpcRequest.getInterfaceName();
+        String interfaceName = rpcRequest.getInterfaceName();
         //接口限流降级
-        RateLimit rateLimit=serviceProvider.getRateLimitProvider().getRateLimit(interfaceName);
+        RateLimit rateLimit = serviceProvider.getRateLimitProvider().getRateLimit(interfaceName);
         if(!rateLimit.getToken()){
             //如果获取令牌失败，进行限流降级，快速返回结果
             System.out.println("服务限流！！");
@@ -39,10 +40,10 @@ public class NettyRPCServerHandler extends SimpleChannelInboundHandler<RpcReques
         //得到服务端相应服务实现类
         Object service = serviceProvider.getService(interfaceName);
         //反射调用方法
-        Method method=null;
+        Method method;
         try {
-            method= service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamsType());
-            Object invoke=method.invoke(service,rpcRequest.getParams());
+            method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamsType());
+            Object invoke = method.invoke(service,rpcRequest.getParams());
             return RpcResponse.success(invoke);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();

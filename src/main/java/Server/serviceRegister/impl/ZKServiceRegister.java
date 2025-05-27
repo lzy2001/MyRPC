@@ -11,7 +11,7 @@ import java.net.InetSocketAddress;
 
 public class ZKServiceRegister implements ServiceRegister {
     // curator 提供的zookeeper客户端
-    private CuratorFramework client;
+    private final CuratorFramework client;
     //zookeeper根路径节点
     private static final String ROOT_PATH = "MyRPC";
     private static final String RETRY = "CanRetry";
@@ -31,7 +31,7 @@ public class ZKServiceRegister implements ServiceRegister {
     }
     //注册服务到注册中心
     @Override
-    public void register(String serviceName, InetSocketAddress serviceAddress,boolean canRetry) {
+    public void register(String serviceName, InetSocketAddress serviceAddress, boolean canRetry) {
         try {
             // serviceName创建成永久节点，服务提供者下线时，不删服务名，只删地址
             if(client.checkExists().forPath("/" + serviceName) == null){
