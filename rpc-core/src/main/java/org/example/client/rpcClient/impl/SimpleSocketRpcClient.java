@@ -1,6 +1,6 @@
-package org.example.client.rpcclient.impl;
+package org.example.client.rpcClient.impl;
 
-import org.example.client.rpcclient.RpcClient;
+import org.example.client.rpcClient.RpcClient;
 import common.message.RpcRequest;
 import common.message.RpcResponse;
 

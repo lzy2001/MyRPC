@@ -1,6 +1,4 @@
-package common.serializer.myserializer;
-
-
+package common.serializer.mySerializer;
 
 
 import java.util.HashMap;

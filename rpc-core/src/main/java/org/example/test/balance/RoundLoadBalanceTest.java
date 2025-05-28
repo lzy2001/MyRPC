@@ -1,6 +1,6 @@
 package org.example.test.balance;
 
-import org.example.client.servicecenter.balance.impl.RoundLoadBalance;
+import org.example.client.serviceCenter.balance.impl.RoundLoadBalance;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,13 +9,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * @ClassName RoundLoadBalanceTest
- * @Description 轮询测试类
- * @Author Tong
- * @LastChangeDate 2024-12-05 15:46
- * @Version v5.0
- */
 public class RoundLoadBalanceTest {
 
     private RoundLoadBalance loadBalance;

@@ -1,0 +1,5 @@
+Hessian=org.example.common.serializer.mySerializer.HessianSerializer
+protobuf=org.example.common.serializer.mySerializer.ProtobufSerializer
+json=org.example.common.serializer.mySerializer.JsonSerializer
+kryo=org.example.common.serializer.mySerializer.KryoSerializer
+jdk=org.example.common.serializer.mySerializer.ObjectSerializer

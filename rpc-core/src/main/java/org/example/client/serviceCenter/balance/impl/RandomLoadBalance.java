@@ -1,6 +1,6 @@
-package org.example.client.servicecenter.balance.impl;
+package org.example.client.serviceCenter.balance.impl;
 
-import org.example.client.servicecenter.balance.LoadBalance;
+import org.example.client.serviceCenter.balance.LoadBalance;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;

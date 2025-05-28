@@ -1,12 +1,12 @@
 package org.example.client.proxy;
 
-import org.example.client.circuitbreaker.CircuitBreaker;
-import org.example.client.circuitbreaker.CircuitBreakerProvider;
-import org.example.client.rpcclient.RpcClient;
+import org.example.client.circuitBreaker.CircuitBreaker;
+import org.example.client.circuitBreaker.CircuitBreakerProvider;
+import org.example.client.rpcClient.RpcClient;
 import org.example.client.retry.GuavaRetry;
-import org.example.client.rpcclient.impl.NettyRpcClient;
-import org.example.client.servicecenter.ServiceCenter;
-import org.example.client.servicecenter.ZKServiceCenter;
+import org.example.client.rpcClient.impl.NettyRpcClient;
+import org.example.client.serviceCenter.ServiceCenter;
+import org.example.client.serviceCenter.ZKServiceCenter;
 
 
 import common.message.RpcRequest;
@@ -21,7 +21,7 @@ import java.net.InetSocketAddress;
 
 @Slf4j
 public class ClientProxy implements InvocationHandler {
-    //传入参数service接口的class对象，反射封装成一个request
+    // 传入参数service接口的class对象，反射封装成一个request
 
     private RpcClient rpcClient;
     private ServiceCenter serviceCenter;
@@ -32,7 +32,7 @@ public class ClientProxy implements InvocationHandler {
         circuitBreakerProvider = new CircuitBreakerProvider();
     }
 
-    //jdk动态代理，每一次代理对象调用方法，都会经过此方法增强（反射获取request对象，socket发送到服务端）
+    // jdk动态代理，每一次代理对象调用方法，都会经过此方法增强（反射获取request对象，socket发送到服务端）
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         //构建request
@@ -104,8 +104,8 @@ public class ClientProxy implements InvocationHandler {
         return sb.toString();
     }
 
-    //关闭创建的资源
-    //注：如果在需要C-S保持长连接的场景下无需调用close方法
+    // 关闭创建的资源
+    // 注：如果在需要C-S保持长连接的场景下无需调用close方法
     public void close(){
         rpcClient.close();
         serviceCenter.close();

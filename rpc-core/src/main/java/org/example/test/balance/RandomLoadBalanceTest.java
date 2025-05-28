@@ -1,6 +1,6 @@
 package org.example.test.balance;
 
-import org.example.client.servicecenter.balance.impl.RandomLoadBalance;
+import org.example.client.serviceCenter.balance.impl.RandomLoadBalance;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,13 +10,6 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @ClassName RandomLoadBalanceTest
- * @Description 随机负载均衡器测试
- * @Author Tong
- * @LastChangeDate 2024-12-05 15:43
- * @Version v5.0
- */
 public class RandomLoadBalanceTest {
 
     private RandomLoadBalance loadBalance;

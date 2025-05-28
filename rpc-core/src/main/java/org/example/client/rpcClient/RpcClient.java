@@ -1,4 +1,4 @@
-package org.example.client.rpcclient;
+package org.example.client.rpcClient;
 
 
 import common.message.RpcRequest;

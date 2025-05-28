@@ -1,9 +1,9 @@
-package org.example.client.servicecenter;
+package org.example.client.serviceCenter;
 
 import org.example.client.cache.ServiceCache;
-import org.example.client.servicecenter.ZKWatcher.watchZK;
-import org.example.client.servicecenter.balance.LoadBalance;
-import org.example.client.servicecenter.balance.impl.ConsistencyHashBalance;
+import org.example.client.serviceCenter.ZKWatcher.watchZK;
+import org.example.client.serviceCenter.balance.LoadBalance;
+import org.example.client.serviceCenter.balance.impl.ConsistencyHashBalance;
 import common.message.RpcRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
@@ -18,9 +18,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @Slf4j
 public class ZKServiceCenter implements ServiceCenter {
-    // curator 提供的zookeeper客户端
+    // curator 提供的 zookeeper 客户端
     private CuratorFramework client;
-    //zookeeper根路径节点
+    // zookeeper 根路径节点
     private static final String ROOT_PATH = "MyRPC";
     private static final String RETRY = "CanRetry";
     //serviceCache
@@ -32,9 +32,9 @@ public class ZKServiceCenter implements ServiceCenter {
     public ZKServiceCenter() throws InterruptedException {
         // 指数时间重试
         RetryPolicy policy = new ExponentialBackoffRetry(1000, 3);
-        // zookeeper的地址固定，不管是服务提供者还是，消费者都要与之建立连接
-        // sessionTimeoutMs 与 zoo.cfg中的tickTime 有关系，
-        // zk还会根据minSessionTimeout与maxSessionTimeout两个参数重新调整最后的超时值。默认分别为tickTime 的2倍和20倍
+        // zookeeper 的地址固定，不管是服务提供者还是，消费者都要与之建立连接
+        // sessionTimeoutMs 与 zoo.cfg 中的 tickTime 有关系，
+        // zk 还会根据 minSessionTimeout 与 maxSessionTimeout 两个参数重新调整最后的超时值。默认分别为 tickTime 的2倍和20倍
         // 使用心跳监听状态
         this.client = CuratorFrameworkFactory.builder().connectString("127.0.0.1:2181")
                 .sessionTimeoutMs(40000).retryPolicy(policy).namespace(ROOT_PATH).build();
@@ -53,14 +53,14 @@ public class ZKServiceCenter implements ServiceCenter {
     public InetSocketAddress serviceDiscovery(RpcRequest request) {
         String serviceName = request.getInterfaceName();
         try {
-            //先从本地缓存中找
+            // 先从本地缓存中找
             List<String> addressList = cache.getServiceListFromCache(serviceName);
-            //如果找不到，再去zookeeper中找
-            //这种i情况基本不会发生，或者说只会出现在初始化阶段
+            // 如果找不到，再去zookeeper中找
             if (addressList == null) {
                 addressList = client.getChildren().forPath("/" + serviceName);
                 // 如果本地缓存中没有该服务名的地址列表，则添加
                 List<String> cachedAddresses = cache.getServiceListFromCache(serviceName);
+                // 通过双重检查减少缓存更新冲突
                 if (cachedAddresses == null || cachedAddresses.isEmpty()) {
                     // 假设 addServiceToCache 方法可以处理单个地址
                     for (String address : addressList) {
@@ -80,9 +80,9 @@ public class ZKServiceCenter implements ServiceCenter {
         }
         return null;
     }
-    //保证线程安全使用CopyOnWriteArraySet
+    // 保证线程安全使用 CopyOnWriteArraySet
     private Set<String> retryServiceCache = new CopyOnWriteArraySet<>();
-    //写一个白名单缓存，优化性能
+    // 写一个白名单缓存，优化性能
     @Override
     public boolean checkRetry(InetSocketAddress serviceAddress, String methodSignature) {
         if (retryServiceCache.isEmpty()) {

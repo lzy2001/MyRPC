@@ -1,4 +1,4 @@
-package common.serializer.myserializer;
+package common.serializer.mySerializer;
 
 
 import org.example.pojo.User;

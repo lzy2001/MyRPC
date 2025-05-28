@@ -1,4 +1,4 @@
-package org.example.client.servicecenter;
+package org.example.client.serviceCenter;
 
 
 import common.message.RpcRequest;

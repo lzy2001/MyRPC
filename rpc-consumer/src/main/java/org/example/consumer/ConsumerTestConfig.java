@@ -1,13 +1,13 @@
 package org.example.consumer;
 
 
-import com.kama.config.KRpcConfig;
 import common.util.ConfigUtil;
+import org.example.config.RpcConfig;
 
 
 public class ConsumerTestConfig {
     public static void main(String[] args) {
-        KRpcConfig rpc = ConfigUtil.loadConfig(KRpcConfig.class, "rpc");
+        RpcConfig rpc = ConfigUtil.loadConfig(RpcConfig.class, "rpc");
         System.out.println(rpc);
     }
 

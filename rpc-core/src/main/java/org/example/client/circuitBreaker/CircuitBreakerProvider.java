@@ -1,4 +1,4 @@
-package org.example.client.circuitbreaker;
+package org.example.client.circuitBreaker;
 
 import lombok.extern.slf4j.Slf4j;
 

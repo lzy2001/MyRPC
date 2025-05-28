@@ -14,21 +14,21 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @ClassName ZKServiceRegister
- * @Description zk服务注册中心
- * @Author Tong
- * @LastChangeDate 2024-12-02 10:28
- * @Version v5.0
- */
 @Slf4j
 public class ZKServiceRegister implements ServiceRegister {
+    // curator 提供的zookeeper客户端
     private CuratorFramework client;
+    // zookeeper根路径节点
     private static final String ROOT_PATH = "MyRPC";
     private static final String RETRY = "CanRetry";
 
+    //负责zookeeper客户端的初始化，并与zookeeper服务端进行连接
     public ZKServiceRegister() {
         RetryPolicy policy = new ExponentialBackoffRetry(1000, 3);
+        // zookeeper的地址固定，不管是服务提供者还是，消费者都要与之建立连接
+        // sessionTimeoutMs 与 zoo.cfg中的tickTime 有关系，
+        // zk还会根据minSessionTimeout与maxSessionTimeout两个参数重新调整最后的超时值。默认分别为tickTime 的2倍和20倍
+        // 使用心跳监听状态
         this.client = CuratorFrameworkFactory.builder()
                 .connectString("127.0.0.1:2181")
                 .sessionTimeoutMs(40000)
@@ -38,17 +38,19 @@ public class ZKServiceRegister implements ServiceRegister {
         this.client.start();
         log.info("Zookeeper 连接成功");
     }
-
+    // 注册服务到注册中心
     @Override
     public void register(Class<?> clazz, InetSocketAddress serviceAddress) {
         String serviceName = clazz.getName();
         try {
+            // serviceName创建成永久节点，服务提供者下线时，不删服务名，只删地址
             if (client.checkExists().forPath("/" + serviceName) == null) {
                 client.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).forPath("/" + serviceName);
                 log.info("服务节点 {} 创建成功", "/" + serviceName);
             }
-
+            // 路径地址，一个/代表一个节点
             String path = "/" + serviceName + "/" + getServiceAddress(serviceAddress);
+
             if (client.checkExists().forPath(path) == null) {
                 client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
                 log.info("服务地址 {} 注册成功", path);

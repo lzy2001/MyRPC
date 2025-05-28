@@ -1,6 +1,6 @@
 package org.example.consumer;
 
-import com.kama.client.proxy.ClientProxy;
+import org.example.client.proxy.ClientProxy;
 import org.example.pojo.User;
 
 import org.example.service.UserService;

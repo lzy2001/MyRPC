@@ -1,36 +1,36 @@
 package org.example;
 
 
-import org.example.config.KRpcConfig;
+import org.example.config.RpcConfig;
 import org.example.config.RpcConstant;
 import common.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class KRpcApplication {
-    private static volatile KRpcConfig rpcConfigInstance;
+public class RpcApplication {
+    private static volatile RpcConfig rpcConfigInstance;
 
-    public static void initialize(KRpcConfig customRpcConfig) {
+    public static void initialize(RpcConfig customRpcConfig) {
         rpcConfigInstance = customRpcConfig;
         log.info("RPC 框架初始化，配置 = {}", customRpcConfig);
     }
 
     public static void initialize() {
-        KRpcConfig customRpcConfig;
+        RpcConfig customRpcConfig;
         try {
-            customRpcConfig = ConfigUtil.loadConfig(KRpcConfig.class, RpcConstant.CONFIG_FILE_PREFIX);
+            customRpcConfig = ConfigUtil.loadConfig(RpcConfig.class, RpcConstant.CONFIG_FILE_PREFIX);
             log.info("成功加载配置文件，配置文件名称 = {}", RpcConstant.CONFIG_FILE_PREFIX); // 添加成功加载的日志
         } catch (Exception e) {
             // 配置加载失败，使用默认配置
-            customRpcConfig = new KRpcConfig();
+            customRpcConfig = new RpcConfig();
             log.warn("配置加载失败，使用默认配置");
         }
         initialize(customRpcConfig);
     }
 
-    public static KRpcConfig getRpcConfig() {
+    public static RpcConfig getRpcConfig() {
         if (rpcConfigInstance == null) {
-            synchronized (KRpcApplication.class) {
+            synchronized (RpcApplication.class) {
                 if (rpcConfigInstance == null) {
                     initialize();  // 确保在第一次调用时初始化
                 }

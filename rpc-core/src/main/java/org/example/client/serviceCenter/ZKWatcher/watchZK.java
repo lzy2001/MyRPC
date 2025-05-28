@@ -1,4 +1,4 @@
-package org.example.client.servicecenter.ZKWatcher;
+package org.example.client.serviceCenter.ZKWatcher;
 
 import org.example.client.cache.ServiceCache;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,7 @@
 package org.example.server.provider;
 
 
+import lombok.Getter;
 import org.example.server.rateLimit.provider.RateLimitProvider;
 
 import org.example.server.serviceRegister.ServiceRegister;
@@ -20,6 +21,7 @@ public class ServiceProvider {
     //注册服务类
     private ServiceRegister serviceRegister;
     //限流器
+    @Getter
     private RateLimitProvider rateLimitProvider;
 
     public ServiceProvider(String host, int port) {
@@ -47,7 +49,4 @@ public class ServiceProvider {
         return interfaceProvider.get(interfaceName);
     }
 
-    public RateLimitProvider getRateLimitProvider() {
-        return rateLimitProvider;
-    }
 }

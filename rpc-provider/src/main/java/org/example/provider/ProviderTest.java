@@ -3,7 +3,7 @@ package org.example.provider;
 import org.example.provider.impl.UserServiceImpl;
 import org.example.server.provider.ServiceProvider;
 import org.example.server.server.RpcServer;
-import org.example.KRpcApplication;
+import org.example.RpcApplication;
 import org.example.server.server.impl.NettyRpcServer;
 import org.example.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ProviderTest {
 
     public static void main(String[] args) throws InterruptedException {
-        KRpcApplication.initialize();
-        String ip=KRpcApplication.getRpcConfig().getHost();
-        int port=KRpcApplication.getRpcConfig().getPort();
+        RpcApplication.initialize();
+        String ip= RpcApplication.getRpcConfig().getHost();
+        int port= RpcApplication.getRpcConfig().getPort();
         // 创建 UserService 实例
         UserService userService = new UserServiceImpl();
         ServiceProvider serviceProvider = new ServiceProvider(ip, port);

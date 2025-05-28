@@ -1,6 +1,6 @@
 package org.example.test.balance;
 
-import org.example.client.servicecenter.balance.impl.ConsistencyHashBalance;
+import org.example.client.serviceCenter.balance.impl.ConsistencyHashBalance;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,13 +9,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * @ClassName ConsistencyHashBalanceTest
- * @Description 一致性哈希测试类
- * @Author Tong
- * @LastChangeDate 2024-12-05 15:39
- * @Version v5.0
- */
 public class ConsistencyHashBalanceTest {
 
     private ConsistencyHashBalance balance;

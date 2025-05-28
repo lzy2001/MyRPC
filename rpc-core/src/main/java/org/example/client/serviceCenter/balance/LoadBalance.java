@@ -1,4 +1,4 @@
-package org.example.client.servicecenter.balance;
+package org.example.client.serviceCenter.balance;
 
 
 import java.util.List;

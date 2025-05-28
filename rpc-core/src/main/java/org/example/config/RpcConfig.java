@@ -1,6 +1,6 @@
 package org.example.config;
 
-import org.example.client.servicecenter.balance.impl.ConsistencyHashBalance;
+import org.example.client.serviceCenter.balance.impl.ConsistencyHashBalance;
 import org.example.server.serviceRegister.impl.ZKServiceRegister;
 import common.serializer.mySerializer.Serializer;
 import lombok.*;
@@ -11,9 +11,9 @@ import lombok.*;
 @Setter
 @Builder
 @ToString
-public class KRpcConfig {
+public class RpcConfig {
     //名称
-    private String name = "krpc";
+    private String name = "rpc";
     //端口
     private Integer port = 9999;
     //主机名
