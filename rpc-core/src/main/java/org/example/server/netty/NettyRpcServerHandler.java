@@ -3,13 +3,13 @@ package org.example.server.netty;
 
 import common.message.RpcRequest;
 import common.message.RpcResponse;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.server.provider.ServiceProvider;
 import org.example.server.rateLimit.RateLimit;
+import org.example.trace.interceptor.ServerTraceInterceptor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,8 +26,16 @@ public class NettyRpcServerHandler extends SimpleChannelInboundHandler<RpcReques
             log.error("接收到非法请求，RpcRequest 为空");
             return;
         }
+        // trace 记录
+        ServerTraceInterceptor.beforeHandle();
+
         RpcResponse response = getResponse(request);
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+        // ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+
+        // trace 上报
+        ServerTraceInterceptor.afterHandle(request.getMethodName());
+
+        ctx.writeAndFlush(response);
     }
 
     @Override

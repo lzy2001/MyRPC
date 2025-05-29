@@ -12,6 +12,7 @@ import org.example.client.serviceCenter.ZKServiceCenter;
 import common.message.RpcRequest;
 import common.message.RpcResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.example.trace.interceptor.ClientTraceInterceptor;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -35,22 +36,24 @@ public class ClientProxy implements InvocationHandler {
     // jdk动态代理，每一次代理对象调用方法，都会经过此方法增强（反射获取request对象，socket发送到服务端）
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        //构建request
+        // trace 记录
+        ClientTraceInterceptor.beforeInvoke();
+        // 构建request
         RpcRequest request = RpcRequest.builder()
                 .interfaceName(method.getDeclaringClass().getName())
                 .methodName(method.getName())
                 .params(args).paramsType(method.getParameterTypes()).build();
-        //获取熔断器
+        // 获取熔断器
         CircuitBreaker circuitBreaker = circuitBreakerProvider.getCircuitBreaker(method.getName());
-        //判断熔断器是否允许请求经过
+        // 判断熔断器是否允许请求经过
         if (!circuitBreaker.allowRequest()) {
             log.warn("熔断器开启，请求被拒绝: {}", request);
             //这里可以针对熔断做特殊处理，返回特殊值
             return null;
         }
-        //数据传输
+        // 数据传输
         RpcResponse response;
-        //后续添加逻辑：为保持幂等性，只对白名单上的服务进行重试
+        // 后续添加逻辑：为保持幂等性，只对白名单上的服务进行重试
         // 如果启用重试机制，先检查是否需要重试
         String methodSignature = getMethodSignature(request.getInterfaceName(), method);
         log.info("方法签名: " + methodSignature);
@@ -67,10 +70,10 @@ public class ClientProxy implements InvocationHandler {
                 throw e;  // 将异常抛给调用者
             }
         } else {
-            //只调用一次
+            // 只调用一次
             response = rpcClient.sendRequest(request);
         }
-        //记录response的状态，上报给熔断器
+        // 记录response的状态，上报给熔断器
         if (response != null) {
             if (response.getCode() == 200) {
                 circuitBreaker.recordSuccess();
@@ -79,6 +82,8 @@ public class ClientProxy implements InvocationHandler {
             }
             log.info("收到响应: {} 状态码: {}", request.getInterfaceName(), response.getCode());
         }
+        // trace 上报
+        ClientTraceInterceptor.afterInvoke(method.getName());
 
         return response != null ? response.getData() : null;
     }

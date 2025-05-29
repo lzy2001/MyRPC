@@ -23,6 +23,7 @@ public class NettyClientInitializer extends ChannelInitializer<SocketChannel> {
             pipeline.addLast(new MyEncoder(Serializer.getSerializerByCode(3)));
             pipeline.addLast(new MyDecoder());
             pipeline.addLast(new NettyClientHandler());
+            pipeline.addLast(new MDCChannelHandler());
 
             log.info("Netty client pipeline initialized with serializer type: {}",Serializer.getSerializerByCode(3).toString());
         } catch (Exception e) {
